@@ -41,11 +41,11 @@ export const addMessageViaWebhook = async (message) => {
 
 
 export const addMessageWebhook = async (req, res) => {
-  const { pretext, title, text, author_name } = req.body; // Extracting data from the request body
+  const { pretext, title, text, author_name,WEB_URL } = req.body; // Extracting data from the request body
 
   try {
     // Send a POST request to the webhook URL
-    const response = await axios.post(WEBHOOK_URL, {
+    const response = await axios.post(WEB_URL, {
       pretext,
       title,
       text,

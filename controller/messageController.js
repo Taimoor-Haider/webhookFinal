@@ -39,6 +39,47 @@ export const addMessageViaWebhook = async (message) => {
   }
 };
 
+
+export const addMessageViaWebhook = async (req, res) => {
+  const { pretext, title, text, author_name } = req.body; // Extracting data from the request body
+
+  try {
+    // Send a POST request to the webhook URL
+    const response = await axios.post(WEBHOOK_URL, {
+      pretext,
+      title,
+      text,
+      author_name,
+    });
+    console.log("Response from webhook:");
+    console.log(response.data);
+
+    // Check if the response status is 200
+    if (response.status !== 200) {
+      console.error("Webhook response error:", response.data);
+      return res.status(response.status).json({ error: "Webhook failed" });
+    }
+
+    // Create a new Webhook document
+    const webhook = new Webhook({
+      pretext,
+      title,
+      text,
+      author_name,
+      createdAt: new Date(),
+    });
+
+    // Save the webhook data to the database
+    await webhook.save();
+
+    // Send a success response to the client
+    res.status(200).json({ message: "Webhook processed successfully" });
+  } catch (error) {
+    console.error("Error processing webhook:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 export const searchMessagesByAuthorName = async (req, res) => {
   const { author_name } = req.body;
 

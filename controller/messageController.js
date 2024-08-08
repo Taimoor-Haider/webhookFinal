@@ -40,7 +40,7 @@ export const addMessageViaWebhook = async (message) => {
 };
 
 
-export const addMessageViaWebhook = async (req, res) => {
+export const addMessageWebhook = async (req, res) => {
   const { pretext, title, text, author_name } = req.body; // Extracting data from the request body
 
   try {
